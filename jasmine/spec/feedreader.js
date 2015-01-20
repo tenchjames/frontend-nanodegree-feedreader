@@ -88,7 +88,7 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test wil require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-         var feedContainer = $('.feed');
+        var feedContainer = $('.feed');
 
         beforeEach(function(done) {
             loadFeed(0, done);    
@@ -108,6 +108,17 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+         var initialFeeds;
+         beforeEach(function(done) {
+            initialFeeds = $('.feed').html();
+            loadFeed(1, done);
+         });
+
+         it('new feed has different data', function() {
+            var newFeeds = $('.feed').html();
+            expect(newFeeds).not.toEqual(initialFeeds);
+         })
+
     });
 
 }());
