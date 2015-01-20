@@ -55,11 +55,16 @@ $(function() {
 
     /* TODO: Write a new test suite named "The menu" */
     describe('The menu', function() {
+        beforeEach(function() {
+            spyOn(window, 'loadFeed');
+        });
+
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
+
         it('menu hidden by default', function() {
             var body = $('body');
             expect(body.hasClass('menu-hidden')).toBe(true);
@@ -77,6 +82,33 @@ $(function() {
             $('.menu-icon-link').click();
             expect(body.hasClass('menu-hidden')).toBe(true);
         });
+
+        /* additional test added to ensure that when the menu
+         * click events are called, check that loadFeed funciton is
+         * triggered
+         */
+        it('menu items call loadFeed', function() {
+            var feedListLinks = $('a', '.feed-list');
+
+            for (var i = 0; i < feedListLinks.length; i += 1) {      
+                $(feedListLinks[i]).trigger('click');   
+                expect(window.loadFeed).toHaveBeenCalled();       
+            }
+        });
+
+        /* additional test added to ensure that when the menu
+         * click events are called, check that the menu is hidden
+         * triggered
+         */
+        it('menu items click closes menu', function() {
+            var feedListLinks = $('a', '.feed-list'),
+                body = $('body');
+
+            for (var i = 0; i < feedListLinks.length; i += 1) {      
+                $(feedListLinks[i]).trigger('click');   
+                expect(body.hasClass('menu-hidden')).toBe(true);      
+            }
+        });        
     });
 
 
@@ -101,7 +133,6 @@ $(function() {
         });
     });
 
-
     /* TODO: Write a new test suite named "New Feed Selection" */ 
     describe('New Feed Selection', function() {
         /* TODO: Write a test that ensures when a new feed is loaded
@@ -117,8 +148,7 @@ $(function() {
          it('new feed has different data', function() {
             var newFeeds = $('.feed').html();
             expect(newFeeds).not.toEqual(initialFeeds);
-         })
+         });
 
     });
-
 }());
